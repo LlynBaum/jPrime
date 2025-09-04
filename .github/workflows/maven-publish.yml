@@ -26,10 +26,10 @@ jobs:
 
       - name: Build
         working-directory: jPrime
-        run: mvn -B clean package
+        run: mvn -B clean package -Drevision=${GITHUB_REF_NAME#v}
 
       - name: Deploy to GitHub Packages
         working-directory: jPrime
-        run: mvn -B deploy -s $GITHUB_WORKSPACE/settings.xml -Drevision=${GITHUB_REF_NAME#v}
+        run: mvn -B deploy -s ${{ github.workspace }}/settings.xml -Drevision=${GITHUB_REF_NAME#v}
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
