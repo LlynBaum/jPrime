@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ch.bbw.lb</groupId>
-  <artifactId>jPrime</artifactId>
+  <artifactId>jprime</artifactId>
   <version>${revision}</version>
   <packaging>jar</packaging>
 
@@ -12,6 +12,7 @@
   <url>https://github.com/LlynBaum/jPrime</url>
 
   <properties>
+    <revision>0.0.0-SNAPSHOT</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -19,7 +20,7 @@
     <repository>
       <id>github</id>
       <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/LlynBaum/jPrime</url>
+      <url>https://maven.pkg.github.com/llynbaum/jprime</url>
     </repository>
   </distributionManagement>
 
