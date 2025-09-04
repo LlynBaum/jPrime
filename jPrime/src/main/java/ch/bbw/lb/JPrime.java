@@ -1,7 +1,7 @@
 package ch.bbw.lb;
 
 public class JPrime {
-    public boolean isPrime(int i) {
+    public static boolean isPrime(int i) {
         if (i <= 1) {
             return false;
         }
@@ -13,7 +13,7 @@ public class JPrime {
         return true;
     }
 
-    public boolean isNotPrime(int i) {
+    public static boolean isNotPrime(int i) {
         return !isPrime(i);
     }
 }
