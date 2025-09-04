@@ -2,6 +2,8 @@
 
 A simple Java Library to check easily if a number is a Prime or not.
 
+**Note:** This is for a School assignment
+
 # Getting Started
 
 Add this to your pom.xml
