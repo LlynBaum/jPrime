@@ -1,4 +1,4 @@
-name: Maven Package
+name: Release JAR
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write   # needed to create/update releases
+      # packages: write # not needed anymore since we do not publish to Packages
 
     steps:
       - uses: actions/checkout@v4
@@ -20,16 +20,36 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-          server-id: github
-          settings-path: ${{ github.workspace }}
           cache: maven
 
-      - name: Build
+      - name: Build with Maven
         working-directory: jPrime
         run: mvn -B clean package -Drevision=${GITHUB_REF_NAME#v}
 
-      - name: Deploy to GitHub Packages
-        working-directory: jPrime
-        run: mvn -B deploy -s ${{ github.workspace }}/settings.xml -Drevision=${GITHUB_REF_NAME#v}
+      # Optional: gather exactly the files you want to attach
+      - name: Collect artifacts
+        run: |
+          mkdir -p release-assets
+          # adjust file names/patterns to match your actual outputs
+          cp jPrime/target/*-runner.jar      release-assets/ 2>/dev/null || true
+          cp jPrime/target/*-all.jar         release-assets/ 2>/dev/null || true
+          cp jPrime/target/*-with-deps.jar   release-assets/ 2>/dev/null || true
+          cp jPrime/target/*-javadoc.jar     release-assets/ 2>/dev/null || true
+          cp jPrime/target/*-sources.jar     release-assets/ 2>/dev/null || true
+          cp jPrime/target/*.jar             release-assets/ 2>/dev/null || true
+          cp jPrime/pom.xml                  release-assets/jprime-pom.xml
+
+      # Upload to the GitHub Release for this tag
+      - name: Create GitHub Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}             # e.g. v1.2.3
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            release-assets/**
+          # Optional: auto-generate notes from commits
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
